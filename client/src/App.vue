@@ -18,14 +18,14 @@
     </form>
 
     <div v-if="selectedIssue.id"> 
-      <h2 style="margin-top: 70px;">Update {{ selectedIssue.title }}</h2>
+      <h2 style="margin-top: 70px;">Update {{ selectedIssue.oldTitle }}</h2>
       <form @submit.prevent="updateIssue">
         <input v-model="selectedIssue.title" placeholder="Title" />
         <input v-model="selectedIssue.description" placeholder="Description" />
         <button type="submit">Update</button>
       </form>
 
-      <h2 style="margin-top: 70px;">Delete {{ selectedIssue.title }}</h2>
+      <h2 style="margin-top: 70px;">Delete {{ selectedIssue.oldTitle }}</h2>
       <form @submit.prevent="deleteIssue">
         <button type="submit">Delete</button>
       </form>
@@ -56,7 +56,10 @@ export default {
   },
   methods: {
     selectIssue(issue) {
-      this.selectedIssue = issue
+      this.selectedIssue = {
+        oldTitle: issue.title,
+        ...issue
+      }
     },
     async getAllIssues() {
       const response = await axios.get('http://localhost:3000/issues')
@@ -65,20 +68,26 @@ export default {
     },
     async createIssue() {
       const response = await axios.post('http://localhost:3000/issue', this.newIssue)
-      console.log(response.status)
+      if (response.status === 200) {
+        this.issues.push(response.data.data)
+      }
     },
     async updateIssue() {
       const response = await axios.put(
         `http://localhost:3000/issue/${this.selectedIssue.id}`, 
         this.selectedIssue
       )
-      console.log(response.status)
+      if (response.status === 200) {
+        await this.getAllIssues()
+      }
     },
     async deleteIssue() {
       const response = await axios.delete(
         `http://localhost:3000/issue/${this.selectedIssue.id}`
       )
-      console.log(response.status)
+      if (response.status === 200) {
+        await this.getAllIssues()
+      }
     },
   }
 }
