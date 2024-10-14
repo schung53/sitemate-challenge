@@ -1,0 +1,12 @@
+[
+  {
+    "id": "fc1900ca-c0f9-4ab1-99bc-27fca83c593e",
+    "title": "Issue 149",
+    "description": "Decouple service modules"
+  },
+  {
+    "id": "f4e6c3c0-3a92-47db-80fd-4ca5817f57f9",
+    "title": "Issue 150",
+    "description": "Add support for utf8 in DB"
+  }
+]
